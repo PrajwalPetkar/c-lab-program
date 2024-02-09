@@ -1,0 +1,200 @@
+#include <iostream>
+#include <cstring> // For strcpy
+using namespace std;
+
+struct node
+{
+    int sem;
+    char name[10];
+    char usn[10];
+    char prog[10];
+    char phone[10];
+    node* link;
+};
+
+typedef struct node* NODE;
+
+NODE getnode()
+{
+    NODE x = new node;
+    if (x == NULL)
+    {
+        cout << "Not enough memory";
+        exit(0);
+    }
+    return x;
+}
+
+NODE insert_front(int sem, const char* usn, const char* name, const char* prog, const char* phone, NODE first)
+{
+    NODE temp = getnode();
+    temp->sem = sem;
+    strcpy(temp->usn, usn);
+    strcpy(temp->name, name);
+    strcpy(temp->prog, prog);
+    strcpy(temp->phone, phone);
+    temp->link = first;
+    return temp;
+}
+
+NODE insert_rear(int sem, const char* usn, const char* name, const char* prog, const char* phone, NODE first)
+{
+    NODE temp = getnode();
+    temp->sem = sem;
+    strcpy(temp->usn, usn);
+    strcpy(temp->name, name);
+    strcpy(temp->prog, prog);
+    strcpy(temp->phone, phone);
+
+    if (first == NULL)
+    {
+        cout << "\n\nEmpty list ";
+        return temp;
+    }
+
+    NODE cur = first;
+    while (cur->link != NULL)
+    {
+        cur = cur->link;
+    }
+    cur->link = temp;
+    temp->link = NULL;
+    return first;
+}
+
+NODE delete_front(NODE first)
+{
+    NODE cur;
+    if (first == NULL)
+    {
+        cout << "Empty list ";
+        return NULL;
+    }
+    if (first->link == NULL)
+    {
+        cout << "ITEM DELETED IS " << first->usn;
+        delete first;
+        return NULL;
+    }
+
+    cur = first;
+    first = cur->link;
+    cout << "ITEM DELETED IS " << cur->usn;
+    delete cur;
+    return first;
+}
+
+NODE delete_rear(NODE first)
+{
+    NODE cur, prev;
+    if (first == NULL)
+    {
+        cout << "Empty list ";
+        return NULL;
+    }
+    if (first->link == NULL)
+    {
+        cout << "ITEM DELETED IS " << first->usn;
+        delete first;
+        return NULL;
+    }
+
+    cur = first;
+    while (cur->link != NULL)
+    {
+        prev = cur;
+        cur = cur->link;
+    }
+    prev->link = NULL;
+    cout << "ITEM DELETED IS " << cur->usn;
+    delete cur;
+    return first;
+}
+
+void display(NODE first)
+{
+    NODE cur;
+    if (first == NULL)
+    {
+        cout << "\n\nEmpty node\n" << endl;
+        return;
+    }
+
+    cout << "The student lists are as follows:" << endl;
+    cur = first;
+    while (cur != NULL)
+    {
+        cout << "\nUSN: " << cur->usn;
+        cout << "\tName: " << cur->name;
+        cout << "\tProgramme: " << cur->prog;
+        cout << "\tPhone: " << cur->phone;
+        cout << "\tSemester: " << cur->sem;
+
+        cur = cur->link;
+    }
+}
+
+int main()
+{
+    NODE first;// Initialize the linked list
+
+    int sem;
+    char usn[10], name[10], prog[10], phone[10];
+    int choice;
+
+    for (int i = 0; i < 20; i++)
+    {
+        cout << "\n\n1. Insert front\t 2. Insert rear\t 3. Delete front\t 4. Delete rear\t 5. Display\t 6. Exit" << endl;
+        cin >> choice;
+
+        switch (choice)
+        {
+            case 1:
+                cout << "\nSem to be inserted: ";
+                cin >> sem;
+                cout << "USN: ";
+                cin >> usn;
+                cout << "Name: ";
+                cin >> name;
+                cout << "Programme: ";
+                cin >> prog;
+                cout << "Phone: ";
+                cin >> phone;
+
+                first= insert_front(sem, usn, name, prog, phone, first);
+                break;
+
+            case 2:
+                cout << "\nSem to be inserted: ";
+                cin >> sem;
+                cout << "USN: ";
+                cin >> usn;
+                cout << "Name: ";
+                cin >> name;
+                cout << "Programe ";
+                    cin>>prog;
+                    cout<<"phone: ";
+                    cin>> phone;
+                    
+                    first=insert_rear(sem,usn,name,prog,phone,first);
+                    
+                    
+                    break;
+            
+            case 3:
+                    first=delete_front(first);
+                    break;
+                    
+            case 4:
+                    first=delete_rear(first);
+                    break;           
+                    
+            case 5:
+                    display(first);
+                    break;
+            default:exit(0);
+                    break;
+        }
+
+    }
+}
